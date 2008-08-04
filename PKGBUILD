@@ -1,7 +1,7 @@
-# Maintainer: judd <jvinet@zeroflux.org>
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=pciutils
-pkgver=2.2.8
-pkgrel=3
+pkgver=3.0.0
+pkgrel=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i686 x86_64)
 license=('GPL2')
@@ -10,7 +10,6 @@ url="http://atrey.karlin.mff.cuni.cz/~mj/pciutils.html"
 makedepends=('wget')
 depends=('glibc')
 source=(ftp://ftp.kernel.org/pub/software/utils/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('4d50c37e581351e82baefb55bdcc3966')
 
 build() {
   cd ${startdir}/src/${pkgname}-${pkgver}
@@ -26,3 +25,4 @@ build() {
     install -D -m 644 lib/${i} ${startdir}/pkg/usr/include/pci/${i}
   done
 }
+md5sums=('85b5dae042217cf11bca10d52210a78d')
