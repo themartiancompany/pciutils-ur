@@ -1,6 +1,6 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=pciutils
-pkgver=3.1.3
+pkgver=3.1.4
 pkgrel=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i686 x86_64)
@@ -11,7 +11,7 @@ optdepends=('sh: required by update-pciids')
 makedepends=('wget')
 depends=('glibc')
 source=(ftp://ftp.kernel.org/pub/software/utils/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
-md5sums=('ca1f40e03bea12ac3646e47cefa47f01')
+md5sums=('b38142c61c52f42d19540a0fcb11050a')
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
@@ -27,4 +27,3 @@ build() {
     install -D -m 644 lib/${i} ${pkgdir}/usr/include/pci/${i}
   done
 }
-
