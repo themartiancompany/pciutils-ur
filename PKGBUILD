@@ -1,6 +1,6 @@
 # Maintainer: Tobias Powalowski <tpowa@archlinux.org>
 pkgname=pciutils
-pkgver=3.5.4
+pkgver=3.5.5
 pkgrel=1
 pkgdesc="PCI bus configuration space access library and tools"
 arch=(i686 x86_64)
@@ -15,7 +15,7 @@ validpgpkeys=(
               '5558F9399CD7836850553C6EC28E7847ED70F82D' # Martin Mares <mj@ucw.cz>
              )
 
-md5sums=('c20c5fb89ce22935bb908d1f3d3addde'
+md5sums=('f99f9ea87d063e98ab19943e91716eca'
          'SKIP')
 
 build() {
