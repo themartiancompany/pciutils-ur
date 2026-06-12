@@ -124,7 +124,7 @@ pkgname=(
 pkgver=3.15.0
 _commit="b424ac8b498317965bfd3ab33ae21b158a7f1dd2"
 _bundle_commit="2c24fbf8bf88c297db991a0b45c1926309dc6145"
-pkgrel=5
+pkgrel=6
 _pkgdesc=(
   "PCI bus configuration space"
   "access library and tools"
@@ -245,10 +245,11 @@ elif [[ "${_evmfs}" == "false" ]]; then
     # Martin Mares <mj@ucw.cz>
     "C466A56CADA981F4297D20C31F3D0761D9B65F0B"
   )
-  b2sums=(
-    '634c114f928f37e11054c424d0745f8aaa236a342a62e3fae59519619f5d7a1e9f60bb026e5e8949b0b3f636772f62bb9c1743fd73eb97b2a2e3c09d872a2075'
-)
-
+  if [[ "${_git}" != "true" ]]; then
+    b2sums=(
+      '634c114f928f37e11054c424d0745f8aaa236a342a62e3fae59519619f5d7a1e9f60bb026e5e8949b0b3f636772f62bb9c1743fd73eb97b2a2e3c09d872a2075'
+    )
+  fi
 fi
 
 build() {
