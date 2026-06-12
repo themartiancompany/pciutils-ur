@@ -124,7 +124,7 @@ pkgname=(
 pkgver=3.15.0
 _commit="b424ac8b498317965bfd3ab33ae21b158a7f1dd2"
 _bundle_commit="2c24fbf8bf88c297db991a0b45c1926309dc6145"
-pkgrel=20
+pkgrel=21
 _pkgdesc=(
   "PCI bus configuration space"
   "access library and tools"
