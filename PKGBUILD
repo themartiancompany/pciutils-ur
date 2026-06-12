@@ -267,11 +267,18 @@ build() {
   cd \
     "${_tarname}"
   make \
-    "${_make_opts[@]}"
+    -C \
+      "lib" \
+    "${_make_opts[@]}" \
+    all
     # "lib/libpci.a "
   cp \
     "lib/libpci.a" \
     "${srcdir}"
+  make \
+    -C \
+      "lib" \
+    clean
   make \
     clean
   make \
