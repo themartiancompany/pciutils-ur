@@ -76,12 +76,32 @@ if [[ ! -v "_systemd" ]]; then
     _systemd="false"
   fi
 fi
+if [[ ! -v "_git" ]]; then
+  _git="true"
+fi
+if [[ ! -v "_archive_format" ]]; then
+  if [[ "${_git}" == "true" ]]; then
+    if [[ "${_evmfs}" == "true" ]]; then
+      _archive_format="bundle"
+    elif [[ "${_evmfs}" == "false" ]]; then
+      _archive_format="git"
+    fi
+  elif [[ "${_git}" == "false" ]]; then
+    if [[ "${_git_service}" == "github" ]]; then
+      _archive_format="zip"
+    elif [[ "${_git_service}" == "gitlab" ]]; then
+      _archive_format="tar.gz"
+    fi
+  fi
+fi
 _pkg=pciutils
 pkgbase="${_pkg}"
 pkgname=(
   "${pkgbase}"
 )
 pkgver=3.15.0
+_commit="b424ac8b498317965bfd3ab33ae21b158a7f1dd2"
+_bundle_commit="2c24fbf8bf88c297db991a0b45c1926309dc6145"
 pkgrel=1
 _pkgdesc=(
   "PCI bus configuration space"
@@ -121,20 +141,75 @@ optdepends=(
   'which: for update-pciids'
   'grep: for update-pciids'
   'curl: for update-pciids'
-)	
+)
+source=()
+sha256sums=()
 _http="https://git.kernel.org"
 _ns="pub/scm/utils/pciutils"
 _url="${_http}/${_ns}/${_pkg}"
-source=(
-  "git+${_url}.git#tag=v${pkgver}?signed"
+_tarname="${_pkg}-${_commit}"
+_tarfile="${_tarname}.${_archive_format}"
+_bundle_sum="c1e0b0d92eb76ab3eae6975e8df04025b8a5aa3529a743d844065fba5f778d37"
+_bundle_sig_sum="02e412a71c0e9eb4d018f26a59dc6bca0a9e3da83c59eaaac32b2e261accc821"
+if [[ "${_git}" == "true" ]]; then
+  _sum="${_bundle_sum}"
+  _sig_sum="${_bundle_sig_sum}"
+fi
+# Dvorak
+_sig_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
+# Dogemaster
+_evmfs_ns="0x894d863D5343A8609EdA5430D95Bbd5104C0F245"
+_evmfs_network="100"
+_evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
+_evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
+_sig_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_sig_ns}"
+_evmfs_uri="${_evmfs_dir}/${_sum}"
+_evmfs_src="${_tarfile}::${_evmfs_uri}"
+_sig_uri="${_sig_dir}/${_sig_sum}"
+_sig_src="${_tarfile}.sig::${_sig_uri}"
+if [[ "${_evmfs}" == "false" ]]; then
+  if [[ "${_git}" == "true" ]]; then
+    _uri="git+${_url}.git#tag=v${pkgver}?signed"
+    _src="${_tarfile}::${_uri}"
+  fi
+elif [[ "${_evmfs}" == "true" ]]; then
+  if [[ "${_git}" == "true" ]]; then
+    _src="${_evmfs_src}"
+    source+=(
+      "${_sig_src}"
+    )
+    sha256sums+=(
+      "${_sig_sum}"
+    )
+  fi
+fi
+source+=(
+  "${_src}"
 )
-validpgpkeys=(
-  # Martin Mares <mj@ucw.cz>
-  "C466A56CADA981F4297D20C31F3D0761D9B65F0B"
+sha256sums+=(
+  "${_sum}"
 )
-b2sums=(
-  '634c114f928f37e11054c424d0745f8aaa236a342a62e3fae59519619f5d7a1e9f60bb026e5e8949b0b3f636772f62bb9c1743fd73eb97b2a2e3c09d872a2075'
+if [[ "${_evmfs}" == "true" ]]; then
+  validpgpkeys=(
+    # Truocolo
+    #   <truocolo@aol.com>
+    '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
+    #   <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+    'F690CBC17BD1F53557290AF51FC17D540D0ADEED'
+    # Pellegrino Prevete (dvorak)
+    #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+    '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
+  )
+elif [[ "${_evmfs}" == "false" ]]; then
+  validpgpkeys=(
+    # Martin Mares <mj@ucw.cz>
+    "C466A56CADA981F4297D20C31F3D0761D9B65F0B"
+  )
+  b2sums=(
+    '634c114f928f37e11054c424d0745f8aaa236a342a62e3fae59519619f5d7a1e9f60bb026e5e8949b0b3f636772f62bb9c1743fd73eb97b2a2e3c09d872a2075'
 )
+
+fi
 
 build() {
   local \
