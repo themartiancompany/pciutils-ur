@@ -124,7 +124,7 @@ pkgname=(
 pkgver=3.15.0
 _commit="b424ac8b498317965bfd3ab33ae21b158a7f1dd2"
 _bundle_commit="2c24fbf8bf88c297db991a0b45c1926309dc6145"
-pkgrel=6
+pkgrel=7
 _pkgdesc=(
   "PCI bus configuration space"
   "access library and tools"
@@ -184,8 +184,8 @@ elif [[ "${_git}" == "false" ]]; then
 fi
 # Dvorak
 _sig_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-# Dogemaster
-_evmfs_ns="0x894d863D5343A8609EdA5430D95Bbd5104C0F245"
+# ffren
+_evmfs_ns="0xB6622d419f7BBa353d4e25e99d6BB02Bdb229742"
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
@@ -245,7 +245,7 @@ elif [[ "${_evmfs}" == "false" ]]; then
     # Martin Mares <mj@ucw.cz>
     "C466A56CADA981F4297D20C31F3D0761D9B65F0B"
   )
-  if [[ "${_git}" != "true" ]]; then
+  if [[ "${_git}" == "true" ]]; then
     b2sums=(
       '634c114f928f37e11054c424d0745f8aaa236a342a62e3fae59519619f5d7a1e9f60bb026e5e8949b0b3f636772f62bb9c1743fd73eb97b2a2e3c09d872a2075'
     )
