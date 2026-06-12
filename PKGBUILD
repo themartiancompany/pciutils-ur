@@ -274,7 +274,8 @@ build() {
     # "lib/libpci.a "
   cp \
     "lib/libpci.a" \
-    "${srcdir}"
+    "${srcdir}" || \
+  true
   make \
     -C \
       "lib" \
@@ -284,6 +285,10 @@ build() {
   make \
     "${_make_opts[@]}" \
     all
+  cp \
+    "lib/libpci.a" \
+    "${srcdir}" || \
+  true
 }
 
 package() {
