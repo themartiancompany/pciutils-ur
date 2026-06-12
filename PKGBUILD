@@ -86,6 +86,21 @@ fi
 if [[ ! -v "_git" ]]; then
   _git="true"
 fi
+if [[ ! -v "_git_service" ]]; then
+  _git_service="github"
+fi
+if [[ ! -v "_ns" ]]; then
+  _ns="pub/scm/utils/pciutils"
+  if [[ "${_git_service}" == "github" ]]; then
+    _ns="themartiancompany"
+  fi
+fi
+if [[ ! -v "_http" ]]; then
+  _http="https://git.kernel.org"
+  if [[ "${_git_service}" == "github" ]]; then
+    _http="https://${_git_service}.com"
+  fi
+fi
 if [[ ! -v "_archive_format" ]]; then
   if [[ "${_git}" == "true" ]]; then
     if [[ "${_evmfs}" == "true" ]]; then
@@ -109,7 +124,7 @@ pkgname=(
 pkgver=3.15.0
 _commit="b424ac8b498317965bfd3ab33ae21b158a7f1dd2"
 _bundle_commit="2c24fbf8bf88c297db991a0b45c1926309dc6145"
-pkgrel=4
+pkgrel=5
 _pkgdesc=(
   "PCI bus configuration space"
   "access library and tools"
@@ -151,16 +166,21 @@ optdepends=(
 )
 source=()
 sha256sums=()
-_http="https://git.kernel.org"
-_ns="pub/scm/utils/pciutils"
 _url="${_http}/${_ns}/${_pkg}"
-_tarname="${_pkg}-${_commit}"
+_tag="${_commit}"
+_tag_name="commit"
+_tarname="${_pkg}-${_tag}"
 _tarfile="${_tarname}.${_archive_format}"
 _bundle_sum="c1e0b0d92eb76ab3eae6975e8df04025b8a5aa3529a743d844065fba5f778d37"
 _bundle_sig_sum="02e412a71c0e9eb4d018f26a59dc6bca0a9e3da83c59eaaac32b2e261accc821"
+_github_sum="d5cdffa74aca16b6a42ce5caf2e639169fc070e7ff726c9842e91fbfeace229d"
+_github_sig_sum="6a247e44cb2b28c6060e370cc71213ca25070bc2543ba5fe70cd98e85de5a57d"
 if [[ "${_git}" == "true" ]]; then
   _sum="${_bundle_sum}"
   _sig_sum="${_bundle_sig_sum}"
+elif [[ "${_git}" == "false" ]]; then
+  _sum="${_github_sum}"
+  _sig_sum="${_github_sig_sum}"
 fi
 # Dvorak
 _sig_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
@@ -177,6 +197,19 @@ _sig_src="${_tarfile}.sig::${_sig_uri}"
 if [[ "${_evmfs}" == "false" ]]; then
   if [[ "${_git}" == "true" ]]; then
     _uri="git+${_url}.git#tag=v${pkgver}?signed"
+    _src="${_tarfile}::${_uri}"
+  elif [[ "${_git}" == false ]]; then
+    _uri=""
+    if [[ "${_git_service}" == "github" ]]; then
+      if [[ "${_tag_name}" == "commit" ]]; then
+        _uri="${_url}/archive/${_commit}.${_archive_format}"
+        _sum="${_github_sum}"
+      fi
+    elif [[ "${_git_service}" == "gitlab" ]]; then
+      if [[ "${_tag_name}" == "commit" ]]; then
+        _uri="${_url}/-/archive/${_tag}/${_tag}.${_archive_format}"
+      fi
+    fi
     _src="${_tarfile}::${_uri}"
   fi
 elif [[ "${_evmfs}" == "true" ]]; then
